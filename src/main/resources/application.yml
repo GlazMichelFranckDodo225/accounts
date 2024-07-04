@@ -1,0 +1,37 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: accounts
+  datasource:
+    url: jdbc:h2:mem:db_easy_bank_ms_umr_accounts
+    driverClassName: org.h2.Driver
+    username: sa
+    password: '*ruTuch7D7ub'
+  h2:
+    console:
+      enabled: true
+  jpa:
+    # To generate better SQL queries for the database based
+    # on the chosen Dialect Class
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      format_sql: true
+    # To Avoid Execution of data.sql File Before H2 Setup. To Delay that.
+    defer-datasource-initialization: true
+  # Spring Logging Level Properties
+  logging:
+    level:
+      org:
+        hibernate:
+          SQL: DEBUG
+          type: TRACE
+  # Date formatting
+  mvc:
+    format:
+      date: yyyy-MM-dd
+  # Spring Current Active Profile
+  profiles:
+    active: local
