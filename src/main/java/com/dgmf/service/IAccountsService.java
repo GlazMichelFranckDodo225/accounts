@@ -2,7 +2,7 @@ package com.dgmf.service;
 
 import com.dgmf.dto.CustomerDto;
 
-public interface AccountsService {
+public interface IAccountsService {
     /**
      *
      * @param customerDto - CustomerDto Object
