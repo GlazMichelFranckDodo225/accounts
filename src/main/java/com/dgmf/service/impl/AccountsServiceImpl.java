@@ -1,10 +1,13 @@
 package com.dgmf.service.impl;
 
 import com.dgmf.constants.AccountsConstants;
+import com.dgmf.dto.AccountsDto;
 import com.dgmf.dto.CustomerDto;
 import com.dgmf.entity.Accounts;
 import com.dgmf.entity.Customer;
 import com.dgmf.exception.CustomerAlreadyExistsException;
+import com.dgmf.exception.ResourceNotFoundException;
+import com.dgmf.mapper.AccountsMapper;
 import com.dgmf.mapper.CustomerMapper;
 import com.dgmf.repository.AccountsRepository;
 import com.dgmf.repository.CustomerRepository;
@@ -59,5 +62,29 @@ public class AccountsServiceImpl implements IAccountsService {
         newAccount.setCreatedBy("Anonymous");
 
         return newAccount;
+    }
+
+    /**
+     * @param mobileNumber - Input Mobile Number
+     * @return Accounts Details based on a given mobileNumber
+     */
+    /**
+     * @param mobileNumber - Input Mobile Number
+     * @return Accounts Details based on a given mobileNumber
+     */
+    @Override
+    public CustomerDto fetchAccount(String mobileNumber) {
+        Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+        );
+
+        Accounts accounts = accountsRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(
+                () -> new ResourceNotFoundException("Account", "customerId", customer.getCustomerId().toString())
+        );
+
+        CustomerDto customerDto = CustomerMapper.mapToCustomerDto(customer, new CustomerDto());
+        customerDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
+
+        return customerDto;
     }
 }
