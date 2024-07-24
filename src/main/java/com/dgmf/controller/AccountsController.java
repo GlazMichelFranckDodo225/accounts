@@ -5,17 +5,14 @@ import com.dgmf.dto.CustomerDto;
 import com.dgmf.dto.ResponseDto;
 import com.dgmf.service.IAccountsService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.processing.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping(path="/api/v1/accounts", produces = {MediaType.APPLICATION_JSON_VALUE})
+@RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
 public class AccountsController {
     private IAccountsService iAccountsService;
@@ -41,5 +38,27 @@ public class AccountsController {
         CustomerDto customerDto = iAccountsService.fetchAccount(mobileNumber);
 
         return ResponseEntity.ok(customerDto);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseDto> updateAccountDetails(
+            @RequestBody CustomerDto customerDto
+    ) {
+        boolean isUpdated = iAccountsService.updateAccount(customerDto);
+        if(isUpdated) {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(new ResponseDto(
+                            AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200
+                    ));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.EXPECTATION_FAILED)
+                    .body(new ResponseDto(
+                            AccountsConstants.STATUS_417,
+                            AccountsConstants.MESSAGE_417_UPDATE
+                    )
+                );
+        }
     }
 }
