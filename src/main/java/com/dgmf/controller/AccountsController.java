@@ -5,7 +5,6 @@ import com.dgmf.dto.CustomerDto;
 import com.dgmf.dto.ResponseDto;
 import com.dgmf.service.IAccountsService;
 import lombok.AllArgsConstructor;
-import org.hibernate.annotations.processing.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path="/api", produces = {MediaType.APPLICATION_JSON_VALUE})
 @AllArgsConstructor
 public class AccountsController {
-    private IAccountsService iAccountsService;
+    private final IAccountsService iAccountsService;
 
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createAccount(
